@@ -18,9 +18,8 @@ import org.apache.hadoop.io.Text;
 /**
  * Simple implemention of the AccumuloEventSerializer interface.
  * 
- * rowID, columnFamily, and columnVisibility can be set by adding them to the event headers, 
- * either at the source, or with a flume interceptor. If none of those are set, the rowID 
- * will be a random UUID, columnFamily will be "flume" and columnVisibility will be empty.
+ * rowID, columnFamily, and columnVisibility can be set by adding them to the event headers, either at the source, or with a flume interceptor. If none of those
+ * are set, the rowID will be a random UUID, columnFamily will be "flume" and columnVisibility will be empty.
  */
 
 public class SimpleAccumuloEventSerializer implements AccumuloEventSerializer {

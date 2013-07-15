@@ -117,12 +117,10 @@ public class SimpleAccumuloEventSerializerTest {
       }
     }
   }
-
+  
   /**
-   * Tests the serializer using an event with custom headers.
-   * This makes sure the serializer correctly handles the custom
-   * rowID, columnFamily, and columnVisibility that are set in the
-   * headers.
+   * Tests the serializer using an event with custom headers. This makes sure the serializer correctly handles the custom rowID, columnFamily, and
+   * columnVisibility that are set in the headers.
    */
   @Test
   public void testGetMutationsCustomHeaders() {

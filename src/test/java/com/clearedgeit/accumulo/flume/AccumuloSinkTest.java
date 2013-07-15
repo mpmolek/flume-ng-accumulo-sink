@@ -58,9 +58,7 @@ public class AccumuloSinkTest {
   }
   
   /**
-   * Connect the AccumuloSink to an Accumulo MockInstance, 
-   * process an event and make sure it was correctly written
-   * to Accumulo.
+   * Connect the AccumuloSink to an Accumulo MockInstance, process an event and make sure it was correctly written to Accumulo.
    * 
    * @throws Exception
    */
