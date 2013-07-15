@@ -15,6 +15,7 @@ import org.apache.flume.Channel;
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.EventDeliveryException;
+import org.apache.flume.FlumeException;
 import org.apache.flume.Transaction;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.instrumentation.SinkCounter;
@@ -29,8 +30,6 @@ import com.google.common.base.Preconditions;
  */
 
 public class AccumuloSink extends AbstractSink implements Configurable {
-  
-  private long eventsProcessed;
   
   private String instance;
   private String zkServers;
@@ -104,14 +103,14 @@ public class AccumuloSink extends AbstractSink implements Configurable {
       this.serializer = clazz.newInstance();
       this.serializer.configure(context);
     } catch (ClassNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("Serializer class not found: " + this.serializerClass);
+      throw new FlumeException("Serializer class not found: " + this.serializerClass, e);
     } catch (InstantiationException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("InstantiationException while creating serializer");
+      throw new FlumeException("InstantiationException while creating serializer", e);
     } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("IllegalAccessException while creating serializer");
+      throw new FlumeException("IllegalAccessException while creating serializer", e);
     }
     
     this.sinkCounter = new SinkCounter(this.getName());
@@ -119,9 +118,6 @@ public class AccumuloSink extends AbstractSink implements Configurable {
   
   @Override
   public void start() {
-    
-    this.eventsProcessed = 0;
-    
     // Initialize the connection to Accumulo that
     // this Sink will forward Events to ..
     
@@ -131,15 +127,16 @@ public class AccumuloSink extends AbstractSink implements Configurable {
         this.conn = inst.getConnector(this.user, this.password.getBytes());
       }
       this.writer = this.conn.createBatchWriter(this.tableName, this.maxMemory, this.maxLatency, this.maxWriteThreads);
+      
     } catch (TableNotFoundException e) {
-      System.err.println("Table \"" + this.tableName + "\" not found");
-      e.printStackTrace();
+      logger.error("Could not connect to table, " + this.tableName);
+      throw new FlumeException("Could not connect to table, " + this.tableName, e);
     } catch (AccumuloException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("AccumuloException encoutered. Couldn't connect to Accumulo");
+      throw new FlumeException("AccumuloException encoutered. Couldn't connect to Accumulo", e);
     } catch (AccumuloSecurityException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("AccumuloSecurityException encoutered. Couldn't connect to Accumulo");
+      throw new FlumeException("AccumuloSecurityException encoutered. Couldn't connect to Accumulo", e);
     }
     
     super.start();
@@ -171,7 +168,6 @@ public class AccumuloSink extends AbstractSink implements Configurable {
         } else {
           this.serializer.set(event);
           mutations.addAll(serializer.getMutations());
-          eventsProcessed++;
         }
       }
       if (i == batchSize) {
