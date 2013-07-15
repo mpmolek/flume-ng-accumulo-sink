@@ -105,8 +105,7 @@ public class SimpleAccumuloEventSerializerTest {
         } else if (cf.equals("flume") && cq.equals("header_" + headerKey2)) {
           Assert.assertEquals(headerValue2, value);
         } else {
-          System.out.println("UNEXPECTED COLUMN UPDATE: " + update.toString());
-          fail("Unexpected column update");
+          fail("UNEXPECTED COLUMN UPDATE: " + update.toString());
         }
         
         if (!cv.equals("")) {

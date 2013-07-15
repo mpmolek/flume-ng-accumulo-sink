@@ -19,6 +19,8 @@ import org.apache.flume.Transaction;
 import org.apache.flume.conf.Configurable;
 import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -48,6 +50,8 @@ public class AccumuloSink extends AbstractSink implements Configurable {
   private long batchSize;
   
   private SinkCounter sinkCounter;
+  
+  static private Logger logger = LoggerFactory.getLogger(AccumuloSink.class);
   
   public AccumuloSink() {
     super();
@@ -92,7 +96,7 @@ public class AccumuloSink extends AbstractSink implements Configurable {
     this.maxWriteThreads = context.getInteger(AccumuloSinkConfigurationConstants.CONFIG_MAX_WRITE_THREADS, 2);
     
     // Initialize the event serializer
-    System.out.println("Using serializer: " + this.serializerClass);
+    logger.info("Using serializer: " + this.serializerClass);
     
     Class<? extends AccumuloEventSerializer> clazz;
     try {
@@ -176,9 +180,8 @@ public class AccumuloSink extends AbstractSink implements Configurable {
       sinkCounter.addToEventDrainAttemptCount(i);
       
       writer.addMutations(mutations);
-      // System.out.println("Commiting changes. " + eventsProcessed +
-      // " events processed so far.");
       txn.commit();
+      
     } catch (Throwable t) {
       
       txn.rollback();

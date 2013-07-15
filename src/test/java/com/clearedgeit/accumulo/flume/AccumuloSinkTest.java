@@ -155,8 +155,7 @@ public class AccumuloSinkTest {
         setHeader2 = true;
         rowids[2] = row;
       } else {
-        System.out.println("UNEXPECTED ENTRY: Key::: " + entry.getKey().toString() + " Value::: " + new String(entry.getValue().get()));
-        fail("Unexpected table entry");
+        fail("UNEXPECTED ENTRY: Key::: " + entry.getKey().toString() + " Value::: " + new String(entry.getValue().get()));
       }
       
       count++;
