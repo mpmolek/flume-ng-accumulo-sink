@@ -180,11 +180,8 @@ public class AccumuloSink extends AbstractSink implements Configurable {
       
     } catch (Throwable t) {
       
-      txn.rollback();
-      
-      // Log exception, handle individual exceptions as needed
-      t.printStackTrace();
-      
+      txn.rollback();      
+      logger.warn("Caught " + t.getClass().toString() + " in AccumuloSink.process(). Message: " + t.getMessage());
       status = Status.BACKOFF;
       
       // re-throw all Errors
@@ -204,8 +201,9 @@ public class AccumuloSink extends AbstractSink implements Configurable {
         this.writer.close();
         this.writer = null;
       } catch (MutationsRejectedException e) {
-        e.printStackTrace();
         this.writer = null;
+        logger.error("MutationsRejectedException encoutered on close.");
+        throw new FlumeException("MutationsRejectedException while closing AccumuloSink", e);        
       }
     }
   }

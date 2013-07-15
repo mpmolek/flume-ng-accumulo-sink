@@ -15,6 +15,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Throwables;
 
@@ -25,6 +27,7 @@ import com.google.common.base.Throwables;
 public class SimpleAccumuloEventSerializerTest {
   
   AccumuloEventSerializer serializer;
+  static private Logger logger = LoggerFactory.getLogger(SimpleAccumuloEventSerializerTest.class);
   
   @Before
   public void setUp() throws Exception {
@@ -185,12 +188,12 @@ public class SimpleAccumuloEventSerializerTest {
         } else if (cf.equals("customCF") && cq.equals("header_" + headerKey2)) {
           Assert.assertEquals(headerValue2, value);
         } else {
-          System.out.println("UNEXPECTED COLUMN UPDATE...");
-          System.out.println("rowID: " + rowID);
-          System.out.println("CF: " + cf);
-          System.out.println("CQ: " + cq);
-          System.out.println("CV: " + cv);
-          System.out.println("Value: " + value);
+          logger.error("UNEXPECTED COLUMN UPDATE...");
+          logger.error("rowID: " + rowID);
+          logger.error("CF: " + cf);
+          logger.error("CQ: " + cq);
+          logger.error("CV: " + cv);
+          logger.error("Value: " + value);
           fail("Unexpected column update");
         }
         
