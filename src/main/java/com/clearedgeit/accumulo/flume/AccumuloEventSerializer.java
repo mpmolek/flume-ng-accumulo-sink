@@ -1,12 +1,5 @@
 package com.clearedgeit.accumulo.flume;
 
-/**
-* 
-* Copyright(C) 2013 ClearEdge IT Solutions LLC
-* 
-* @author Matt Molek
-*/
-
 import java.util.List;
 
 import org.apache.accumulo.core.data.Mutation;
@@ -23,13 +16,13 @@ public interface AccumuloEventSerializer extends Configurable,
 	 */
 	public void set(Event event);
 
-	/*
+	/**
 	 * Get the mutations that should be written out to accumulo as a result of
 	 * this event.
 	 */
 	public List<Mutation> getMutations();
 
-	/*
+	/**
 	 * Clean up any state. This will be called when the sink is being stopped.
 	 */
 	public void close();

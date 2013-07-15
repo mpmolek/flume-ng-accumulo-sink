@@ -21,10 +21,10 @@ import org.apache.flume.instrumentation.SinkCounter;
 import org.apache.flume.sink.AbstractSink;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Throwables;
 
 /**
-* An Accumulo sink for flume-ng. 
+* An Accumulo sink for flume-ng. For each event it processes, it gets a list
+* of mutations from a configurable AccumuloEventSerializer.
 */
 
 public class AccumuloSink extends AbstractSink implements Configurable {

@@ -44,6 +44,9 @@ public class SimpleAccumuloEventSerializerTest {
     serializer.close();
   }
   
+  /**
+   * Tests the serializer using an event with default headers.
+   */
   @Test
   public void testGetMutationsDefault() {
     // create an event with body "test event"
@@ -114,7 +117,13 @@ public class SimpleAccumuloEventSerializerTest {
       }
     }
   }
-  
+
+  /**
+   * Tests the serializer using an event with custom headers.
+   * This makes sure the serializer correctly handles the custom
+   * rowID, columnFamily, and columnVisibility that are set in the
+   * headers.
+   */
   @Test
   public void testGetMutationsCustomHeaders() {
     // create an event with body "test event"
